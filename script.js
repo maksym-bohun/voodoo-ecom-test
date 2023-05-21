@@ -1,5 +1,6 @@
 const productsList = document.querySelector(".products-list");
 const modal = document.createElement("div");
+let currentItem, currentImagePosition;
 
 const fetchData = async () => {
   const res = await fetch(
@@ -47,6 +48,153 @@ const generateItems = async () => {
     const brElement = document.createElement("br");
     if ((index + 1) % 4 === 0) productsList.appendChild(brElement);
   });
+
+  const convertDate = (date) => {
+    const newDate = new Date(date);
+    console.log(newDate);
+    const day =
+      newDate.getDate() < 10 ? "0" + newDate.getDate() : newDate.getDate();
+    const month =
+      newDate.getMonth() + 1 < 10
+        ? "0" + newDate.getMonth()
+        : newDate.getMonth();
+    const year = newDate.getFullYear();
+
+    return `${day}.${month}.${year}`;
+  };
+
+  const createImagesSlider = () => {
+    if (currentItem.images.length > 1) {
+      console.log("YES");
+      return `  
+        <span class="chevron-left">
+            <img src="./src/icons/chevron-left.svg" alt="Chevron Left" class="hidden arrow left-arrow">
+        </span>
+        <img class="main-image image-changable"  src="${currentItem.images[0].src}" alt="main image"/>
+         <span class="chevron-right absolute top-1 right-1">
+            <img src="./src/icons/chevron-right.svg" alt="Chevron Right" class="arrow right-arrow">
+        </span>
+        `;
+    } else
+      return `<img class="main-image" src="${currentItem.images[0].src}" alt="main image"/>`;
+  };
+
+  productsList.childNodes.forEach((item) => {
+    item.addEventListener("click", () => {
+      const itemIndex = item.id.split("-")[1];
+      currentItem = data.products[itemIndex];
+      modal.classList = "modal";
+      modal.id = "modal";
+      modal.innerHTML = `
+      <div id="modal-bg" class="modal-bg"></div>
+
+      <div class="modal-content">
+        <h2 class="text-2xl font-bold mb-4">${currentItem.title}</h2>
+        <div> 
+            <div class='image-wrapper'>
+              ${createImagesSlider()}
+            </div>
+            <div class="current-item-info">
+                <div>Type: ${currentItem["product_type"]}</div>
+                <div>
+                    <p>Please choose a variant</p>
+                    <select name="select-variant" id="variant">
+                        ${currentItem.variants.map((variant) => {
+                          return `<option id="${variant.id}" value="${variant.title}">${variant.title}</option>`;
+                        })}
+                    </select>
+                </div>
+                    <div class='availability'>
+                        ${
+                          currentItem.variants[0].available
+                            ? "<span class='product-available'>Available</span>"
+                            : "<span class='product-not-available'>Not available<span>"
+                        }
+                    </div>
+                    <div class="current-product-price">
+                        ${currentItem.variants[0].price + " KR."}
+                    </div>
+                    <div class="product-published-date">Published: ${convertDate(
+                      currentItem["published_at"]
+                    )}</div>
+            </div>
+        </div>
+
+      </div>
+    `;
+      document.querySelector("body").appendChild(modal);
+    });
+  });
 };
+
+document.addEventListener("click", (e) => {
+  console.log();
+
+  console.log();
+  if (Array.from(e.target.classList).includes("modal-bg")) {
+    const modal = document.getElementById("modal");
+    modal.classList.add("hidden");
+    document.querySelector("body").removeChild(modal);
+  }
+
+  if (e.target.id === "variant") {
+    document.querySelector(".current-product-price").textContent =
+      currentItem.variants.filter(
+        (variant) =>
+          variant.id ===
+          +document.querySelector("#variant").options[
+            document.querySelector("#variant").selectedIndex
+          ].id
+      )[0].price + " KR.";
+
+    document.querySelector(".availability").innerHTML =
+      currentItem.variants.filter(
+        (variant) =>
+          variant.id ===
+          +document.querySelector("#variant").options[
+            document.querySelector("#variant").selectedIndex
+          ].id
+      )[0].available
+        ? "<span class='product-available'>Available</span>"
+        : "<span class='product-not-available'>Not available<span>";
+  }
+
+  if (Array.from(e.target.classList).includes("arrow")) {
+    currentImagePosition = currentItem.images.filter(
+      (image) => image.src === document.querySelector(".image-changable").src
+    )[0].position;
+    document.querySelector(".left-arrow").classList.remove("hidden");
+    document.querySelector(".right-arrow").classList.remove("hidden");
+    if (currentImagePosition === currentItem.images.length)
+      document.querySelector(".right-arrow").classList.add("hidden");
+    if (currentImagePosition === 1)
+      document.querySelector(".left-arrow").classList.add("hidden");
+    console.log(currentImagePosition);
+  }
+
+  if (Array.from(e.target.classList).includes("left-arrow")) {
+    if (currentImagePosition !== 1) {
+      document.querySelector(".image-changable").src =
+        currentItem.images.filter(
+          (image) => image.position === currentImagePosition - 1
+        )[0].src;
+    }
+    currentImagePosition = currentItem.images.filter(
+      (image) => image.src === document.querySelector(".image-changable").src
+    )[0].position;
+  }
+
+  if (Array.from(e.target.classList).includes("right-arrow")) {
+    if (currentImagePosition !== currentItem.images.length) {
+      document.querySelector(".image-changable").src =
+        currentItem.images.filter(
+          (image) => image.position === currentImagePosition + 1
+        )[0].src;
+    }
+    currentImagePosition = currentItem.images.filter(
+      (image) => image.src === document.querySelector(".image-changable").src
+    )[0].position;
+  }
+});
 
 generateItems();

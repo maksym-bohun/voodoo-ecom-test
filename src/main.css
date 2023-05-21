@@ -39,9 +39,63 @@
 }
 
 .modal-content > div {
-  @apply flex;
+  @apply relative flex gap-4;
 }
 
 .main-image {
   @apply w-60 mt-10;
+}
+
+.current-item-info {
+  @apply flex flex-col mt-5 md:gap-5 md:mt-10 items-end;
+}
+
+.current-item-info > div:nth-child(1) {
+  @apply font-semibold;
+}
+
+.current-item-info > div:nth-child(2) {
+  @apply flex flex-col;
+}
+
+.current-item-info select {
+  @apply border border-black rounded px-1 py-0.5 mt-2;
+}
+
+.current-product-price {
+  @apply font-bold text-xl text-end;
+}
+
+.product-published-date {
+  @apply absolute bottom-2 right-2 text-xs text-gray-400;
+}
+
+.availability {
+  @apply text-end mt-4 mb-2 md:mt-3 md:-mb-3;
+}
+
+.product-available {
+  @apply px-1.5 py-1 text-white rounded bg-green-700;
+}
+
+.product-not-available {
+  @apply px-1.5 py-1 text-white rounded bg-red-700;
+}
+
+.chevron-left,
+.chevron-right {
+  @apply absolute top-1/2 cursor-pointer;
+}
+
+.chevron-right {
+  @apply right-1;
+}
+
+.chevron-left > img,
+.chevron-right > img {
+  @apply w-8 h-8;
+}
+
+.image-wrapper {
+  @apply relative;
 }

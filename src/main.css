@@ -5,3 +5,43 @@
 .header-btn {
   @apply font-semibold self-center px-2 py-0.5 rounded;
 }
+
+.image-container {
+  @apply w-full self-center md:w-52 mb-20 lg:w-80 lg:h-80 p-2 relative;
+}
+
+.condition-status {
+  @apply absolute bg-black text-white top-4 left-4 text-xs px-1 py-0.5 rounded;
+}
+
+.pick-up-line {
+  @apply flex md:hidden  bg-black py-2 w-full text-white mt-4 text-sm font-semibold justify-center rounded;
+}
+
+.info-container {
+  @apply flex justify-between text-xs mt-2 gap-4;
+}
+
+.product-wrapper {
+  @apply hover:cursor-pointer hover:shadow-md hover:shadow-black/20 transition-all duration-200 rounded;
+}
+
+.modal {
+  @apply fixed z-10 inset-0 flex items-center justify-center;
+}
+
+.modal-bg {
+  @apply fixed inset-0 bg-black opacity-50;
+}
+
+.modal-content {
+  @apply bg-white rounded-lg p-6 z-10;
+}
+
+.modal-content > div {
+  @apply flex;
+}
+
+.main-image {
+  @apply w-60 mt-10;
+}

@@ -1,4 +1,8 @@
 const productsList = document.querySelector(".products-list");
+const chevronDownIcon = document.querySelector(".chevron-down");
+const additionalInfo = document.querySelector("#additional-info");
+const alphaContainer = document.querySelector("#alpha-container");
+const imageContainers = document.querySelectorAll(".image-container");
 const modal = document.createElement("div");
 let currentItem, currentImagePosition;
 
@@ -17,37 +21,51 @@ const generateItems = async () => {
     const newProduct = document.createElement("div");
     newProduct.id = "item-" + index;
     newProduct.className = "product-wrapper";
-    newProduct.innerHTML = `
-        <div class="image-container justify-self-center mb-20 ">
-        <span class="condition-status">USED</span>
-        <img
-        src="${item.images[0].src}"
-        alt="item image"
-        class="h-full border border-black rounded z-10 justify-self-center"
-        />
-        <!-- <div class="h-full border border-black rounded"></div> -->
-        <div class="info-container">
-        <div class="font-semibold text">
-        <div class="product-name">${item.title}</div>
-        <div class="price">000 KR.</div>
-        </div>
-        <div class="flex flex-col">
-        <div class="self-end">Condition</div>
-        <div class="condition">Slightly used</div>
+    newProduct.innerHTML = `<div class="image-container justify-self-center mb-20">
+            <span class="condition-status">USED</span>
+            <img
+              src="${item.images[0].src}"
+              alt="item image"
+              class="h-full border border-black rounded z-10 justify-self-center"
+            />
+            <!-- <div class="h-full border border-black rounded"></div> -->
+            <div class="info-container">
+              <div class="font-semibold text">
+                <div class="product-name">${item.title}</div>
+                <div class="price">000 KR.</div>
+              </div>
+              <div class="flex flex-col">
+                <div class="self-end">Condition</div>
+                <div class="condition">Slightly used</div>
               </div>
             </div>
-            <div
-            class="pick-up-line"
-            >
-            PICK-UP IN <span class="underline ml-2"> 2200</span>
+            <div class="pick-up-line">
+              PICK-UP IN <span class="underline ml-2"> 2200</span>
             </div>
-            </div>
-            `;
+          </div>`;
 
     productsList.appendChild(newProduct);
-    const brElement = document.createElement("br");
-    if ((index + 1) % 4 === 0) productsList.appendChild(brElement);
   });
+
+  document.querySelectorAll(".product-wrapper").forEach((wrapper) =>
+    wrapper.addEventListener("mouseover", (e) => {
+      const targetElement = e.target.closest(".product-wrapper");
+      if (targetElement === wrapper) {
+        const pickUpLine = targetElement.querySelector(".pick-up-line");
+        if (pickUpLine) pickUpLine.classList.add("pick-up-line-shown");
+      }
+    })
+  );
+
+  document.querySelectorAll(".product-wrapper").forEach((wrapper) =>
+    wrapper.addEventListener("mouseleave", (e) => {
+      const targetElement = e.target.closest(".product-wrapper");
+      if (targetElement === wrapper) {
+        const pickUpLine = targetElement.querySelector(".pick-up-line");
+        if (pickUpLine) pickUpLine.classList.remove("pick-up-line-shown");
+      }
+    })
+  );
 
   const convertDate = (date) => {
     const newDate = new Date(date);
@@ -194,6 +212,39 @@ document.addEventListener("click", (e) => {
     currentImagePosition = currentItem.images.filter(
       (image) => image.src === document.querySelector(".image-changable").src
     )[0].position;
+  }
+});
+
+// document.addEventListener("mouseover", (e) => {
+//   if (Array.from(e.target.classList).includes("image-wrapper")) {
+//     const pickUpLine = e.target.children[e.target.children.length - 1];
+//     pickUpLine.classList.add("pick-up-line-shown");
+//   }
+// });
+
+alphaContainer.addEventListener("click", () => {
+  if (Array.from(additionalInfo.classList).includes("hidden")) {
+    additionalInfo.classList.remove("hidden");
+    chevronDownIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+</svg>
+`;
+  } else {
+    additionalInfo.classList.add("hidden");
+    chevronDownIcon.innerHTML = `<svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                  />
+                </svg>`;
   }
 });
 

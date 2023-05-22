@@ -7,7 +7,7 @@
 }
 
 .image-container {
-  @apply w-full self-center md:w-52 mb-20 lg:w-80 lg:h-80 p-2 relative;
+  @apply w-full self-center md:w-52  lg:w-72 lg:h-72 p-2 relative;
 }
 
 .condition-status {
@@ -15,15 +15,19 @@
 }
 
 .pick-up-line {
-  @apply flex md:hidden  bg-black py-2 w-full text-white mt-4 text-sm font-semibold justify-center rounded;
+  @apply flex md:opacity-0 bg-black py-2 w-full text-white mt-4 text-sm font-semibold justify-center rounded;
+}
+
+.pick-up-line-shown {
+  @apply flex md:opacity-100 bg-black py-2 w-full text-white mt-4 text-sm font-semibold justify-center rounded;
 }
 
 .info-container {
-  @apply flex justify-between text-xs mt-2 gap-4;
+  @apply flex justify-between text-xs mt-2 gap-4 h-10;
 }
 
 .product-wrapper {
-  @apply hover:cursor-pointer hover:shadow-md hover:shadow-black/20 transition-all duration-200 rounded;
+  @apply hover:cursor-pointer hover:shadow-md hover:shadow-black/20 transition-all duration-200 rounded mt-10  lg:mb-20;
 }
 
 .modal {

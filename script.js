@@ -19,6 +19,24 @@ const generateItems = async () => {
   data.products.forEach((item, index) => {
     // productsList.appendChild(imageContainer.innerHTML);
     const newProduct = document.createElement("div");
+    const minPrice = item.variants.reduce((min, variant) => {
+      if (variant.price < min) {
+        return variant.price;
+      } else {
+        return min;
+      }
+    }, item.variants[0].price);
+
+    const maxPrice = item.variants.reduce((max, variant) => {
+      if (variant.price > max) {
+        return variant.price;
+      } else {
+        return max;
+      }
+    }, item.variants[0].price);
+    let temp;
+
+    console.log(minPrice, maxPrice);
     newProduct.id = "item-" + index;
     newProduct.className = "product-wrapper";
     newProduct.innerHTML = `<div class="image-container justify-self-center mb-20">
@@ -32,7 +50,7 @@ const generateItems = async () => {
             <div class="info-container">
               <div class="font-semibold text">
                 <div class="product-name">${item.title}</div>
-                <div class="price">000 KR.</div>
+                <div class="price">${minPrice + " - " + maxPrice} KR.</div>
               </div>
               <div class="flex flex-col">
                 <div class="self-end">Condition</div>
